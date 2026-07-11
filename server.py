@@ -1,39 +1,68 @@
 from mcp.server.fastmcp import FastMCP
+from mcp.types import ToolAnnotations
 
 
-# MCP 서버 생성
+# PlayMCP 배포 환경에서 외부 접근이 가능하도록
+# 반드시 0.0.0.0에 바인딩합니다.
 mcp = FastMCP(
-    name="Pet Walk MCP",
+    name="TodaysPetWalk",
+    host="0.0.0.0",
+    port=8000,
     stateless_http=True,
     json_response=True,
 )
 
 
-@mcp.tool()
+@mcp.tool(
+    name="check_server",
+    description=(
+        "Checks whether the Today's Pet Walk MCP server is running normally. "
+        "Use this tool only to verify the server connection."
+    ),
+    annotations=ToolAnnotations(
+        title="Check Today's Pet Walk Server",
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
 def check_server() -> str:
-    """
-    MCP 서버가 정상적으로 실행 중인지 확인합니다.
-    """
+    """Checks whether the MCP server is operating normally."""
 
-    return "Pet Walk MCP 서버가 정상적으로 작동하고 있습니다."
+    return "Today's Pet Walk MCP server is operating normally."
 
 
-@mcp.tool()
+@mcp.tool(
+    name="recommend_walk",
+    description=(
+        "Provides a basic walking response from Today's Pet Walk using the "
+        "dog's name and the requested location. This is currently a connection "
+        "verification tool and does not search live place data."
+    ),
+    annotations=ToolAnnotations(
+        title="Recommend a Basic Dog Walk",
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
 def recommend_walk(
     dog_name: str,
     location: str,
 ) -> str:
     """
-    반려견 이름과 현재 지역을 기준으로 산책 안내를 제공합니다.
+    Provides a basic dog-walking response.
 
     Args:
-        dog_name: 반려견 이름
-        location: 산책할 지역
+        dog_name: Name of the dog.
+        location: Area where the user wants to walk.
     """
 
     return (
-        f"{dog_name}와 함께 {location}에서 산책할 장소를 찾겠습니다. "
-        "현재는 MCP 서버 연결을 확인하기 위한 기본 기능입니다."
+        f"{dog_name}와 함께 {location}에서 산책할 장소를 확인합니다. "
+        "현재는 MCP 연결 검증을 위한 기본 응답입니다."
     )
 
 

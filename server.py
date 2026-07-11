@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict, Optional, Tuple
 
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
